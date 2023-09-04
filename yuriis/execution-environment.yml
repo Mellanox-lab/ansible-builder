@@ -1,0 +1,52 @@
+---
+version: 3
+
+images:
+  base_image:
+    # name: quay.io/centos/centos:stream8  # vanilla image!
+    name: quay.io/centos/centos:stream9  # vanilla image!
+    # name: registry.fedoraproject.org/fedora:38  # vanilla image!
+    # name: registry.access.redhat.com/ubi9/ubi:latest  # vanilla image!
+
+options:
+  user: '1000'  # (optional) sets the username or UID
+  tags:  # (optional) sets tags
+    - 'ee_snap:latest'
+
+dependencies:
+  python_interpreter:
+    package_system: python3  # (optional) name of a Python interpreter OS package to install
+    python_path: /usr/bin/python3  # (optional) path to the Python interpreter to use
+
+  ansible_core:  # (optional) install ansible-core if the base image doesn't already contain it
+    package_pip: https://github.com/ansible/ansible/archive/refs/tags/v2.13.2.tar.gz   # install from a GH ref tarball
+
+  ansible_runner:  # (optional) install ansible-runner if the base image doesn't already contain it
+    package_pip: ansible-runner==2.2.1   # install specific version from PyPI
+
+  # lists of Ansible collections and/or roles to install (or the filename of an Ansible Galaxy CLI requirements YAML file)
+
+  # the contents of this key are not validated by ansible-builder itself; they will be written to `requirements.yml` in
+  # the root of the generated build context and consumed directly by the ansible-galaxy CLI during the build
+  galaxy:
+    collections:
+    # - ansible.windows  # base windows support
+    # - community.windows  # community windows additions
+    - ansible.utils
+    - kubernetes.core
+    - awx.awx
+
+  # explicit list of Python dependencies to install (in addition to those declared by the collections above)
+  python: []
+  # - pywinrm
+
+  # explicit list of bindep entries for OS packages to install (in addition to those declared by the collections above)
+  system:
+  - iputils [platform:rpm]
+  - openssh-clients [platform:rpm]
+
+additional_build_steps:
+#  prepend: |
+#    RUN pip3 install --upgrade pip setuptools
+  append_final:
+    - RUN ls -la /etc

@@ -1,4 +1,4 @@
-PYTHON ?= python
+PYTHON ?= python3
 ifeq ($(origin VIRTUAL_ENV), undefined)
     DIST_PYTHON ?= poetry run $(PYTHON)
 else
