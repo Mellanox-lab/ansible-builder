@@ -49,4 +49,4 @@ additional_build_steps:
 #  prepend: |
 #    RUN pip3 install --upgrade pip setuptools
   append_final:
-    - RUN ls -la /etc
+    - RUN $PYCMD -m pip install --trusted-host swx-repos.mtr.labs.mlnx -i http://swx-repos.mtr.labs.mlnx:8081/repository/spdk-py3/simple spdk-rpc
